@@ -1,0 +1,18 @@
+version: 3
+
+tasks:
+  setup:
+    desc: setup project
+    cmd: cp .env_example .env
+
+  build:
+    desc: build application
+    cmd: docker compose build
+
+  run:
+    desc: run application
+    cmd: docker compose up
+
+  check:
+    desc: check rust code
+    cmd: cargo check
