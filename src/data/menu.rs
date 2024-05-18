@@ -23,7 +23,7 @@ fn load_menu_from_json_file<P: AsRef<Path>>(path: P) -> Result<Vec<Menu>, Box<dy
 }
 
 pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
-    let mut menus = load_menu_from_json_file("menu.json").unwrap();
+    let mut menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
 
     let mut rng = rand::thread_rng();
     menus.shuffle(&mut rng);
