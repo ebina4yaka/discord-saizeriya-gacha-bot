@@ -67,7 +67,7 @@ fn get_price_limit(options: &[ResolvedOption]) -> i64 {
 fn get_exclude_alcohol(options: &[ResolvedOption]) -> bool {
     let default = false;
     if let Some(ResolvedOption {
-        name: "get_exclude_alcohol",
+        name: "exclude_alcohol",
         value: ResolvedValue::Boolean(exclude_alcohol),
         ..
     }) = options.first()
