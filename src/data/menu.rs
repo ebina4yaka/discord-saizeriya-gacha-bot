@@ -28,32 +28,6 @@ pub fn take_menu(id: String) -> Option<Menu> {
     menus.into_iter().find(|m| m.id == id)
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::data::menu::{Menu, take_menu};
-
-    #[test]
-    fn test_take_menu() {
-        let arg = "304";
-        let option_menu = take_menu(arg.to_string());
-
-        let want = serde_json::to_string(&Menu {
-            id:"304".to_string(),
-            name: "エクストラ・バージン・オリーブオイル".to_string(),
-            value: 1200,
-            category: "takeout".to_string(),
-        }).unwrap();
-
-        match option_menu {
-            None=> panic!("missing menu"),
-            Some(m) => {
-                let actual = serde_json::to_string(&m).unwrap();
-                assert_eq!(actual, want);
-            }
-        }
-    }
-}
-
 pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
     let mut menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
 
@@ -73,4 +47,31 @@ pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
     }
 
     picked_menus
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::data::menu::{take_menu, Menu};
+
+    #[test]
+    fn test_take_menu() {
+        let arg = "304";
+        let option_menu = take_menu(arg.to_string());
+
+        let want = serde_json::to_string(&Menu {
+            id: "304".to_string(),
+            name: "エクストラ・バージン・オリーブオイル".to_string(),
+            value: 1200,
+            category: "takeout".to_string(),
+        })
+        .unwrap();
+
+        match option_menu {
+            None => panic!("missing menu"),
+            Some(m) => {
+                let actual = serde_json::to_string(&m).unwrap();
+                assert_eq!(actual, want);
+            }
+        }
+    }
 }
