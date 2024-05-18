@@ -47,7 +47,7 @@ pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
             picked_menus.pop();
         }
 
-        if params.price_limit - picked_value_sum < get_max_sub_min(&picked_menus) {
+        if params.price_limit - picked_value_sum < get_min(&menus) {
             return picked_menus;
         }
     }
@@ -61,20 +61,16 @@ fn pick_rand_menu(mut menus: Vec<Menu>) -> Menu {
     m.clone()
 }
 
-fn get_max_sub_min(slice: &[Menu]) -> i64 {
-    let mut max = &slice[0].value;
+fn get_min(slice: &[Menu]) -> i64 {
     let mut min = &slice[0].value;
 
     for item in slice {
         if item.value < *min {
             min = &item.value;
         }
-        if item.value > *max {
-            max = &item.value;
-        }
     }
 
-    max - min
+    *min
 }
 
 #[cfg(test)]
