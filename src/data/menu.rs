@@ -29,24 +29,52 @@ pub fn take_menu(id: String) -> Option<Menu> {
 }
 
 pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
-    let mut menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
-
-    let mut rng = rand::thread_rng();
-    menus.shuffle(&mut rng);
+    let menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
 
     let mut picked_menus: Vec<Menu> = vec![];
 
-    for m in menus {
-        if m.category == "alcohol" && params.exclude_alcohol {
+    loop {
+        let menu = pick_rand_menu(menus.clone());
+
+        if menu.category == "alcohol" && params.exclude_alcohol {
             continue;
         }
-        picked_menus.push(m);
-        if picked_menus.iter().map(|i| i.value).sum::<i64>() > params.price_limit {
+
+        picked_menus.push(menu);
+
+        let picked_value_sum = picked_menus.iter().map(|i| i.value).sum::<i64>();
+        if picked_value_sum > params.price_limit {
             picked_menus.pop();
+        }
+
+        if params.price_limit - picked_value_sum < get_max_sub_min(&picked_menus) {
+            return picked_menus;
+        }
+    }
+}
+
+fn pick_rand_menu(mut menus: Vec<Menu>) -> Menu {
+    let mut rng = rand::thread_rng();
+    menus.shuffle(&mut rng);
+    let m = menus.first().unwrap();
+
+    m.clone()
+}
+
+fn get_max_sub_min(slice: &[Menu]) -> i64 {
+    let mut max = &slice[0].value;
+    let mut min = &slice[0].value;
+
+    for item in slice {
+        if item.value < *min {
+            min = &item.value;
+        }
+        if item.value > *max {
+            max = &item.value;
         }
     }
 
-    picked_menus
+    max - min
 }
 
 #[cfg(test)]
