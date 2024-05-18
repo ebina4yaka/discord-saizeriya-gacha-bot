@@ -11,9 +11,6 @@ env:
 jobs:
   check:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: test_rust
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,6 +25,11 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: 'install rust'
+        run: |
+          rustup component add clippy
+          rustup component add rustfmt
 
       - name: Build test
         run: cargo build --release --verbose
