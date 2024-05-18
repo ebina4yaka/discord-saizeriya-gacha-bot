@@ -22,6 +22,12 @@ fn load_menu_from_json_file<P: AsRef<Path>>(path: P) -> Result<Vec<Menu>, Box<dy
     Ok(menu)
 }
 
+pub fn take_menu(id: String) -> Option<Menu> {
+    let menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
+
+    menus.into_iter().find(|m| m.id == id)
+}
+
 pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
     let mut menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
 

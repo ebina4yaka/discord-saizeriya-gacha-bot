@@ -30,7 +30,13 @@ impl EventHandler for Handler {
         );
 
         let commands = guild_id
-            .set_commands(&ctx.http, vec![commands::saizeriya_gacha::register()])
+            .set_commands(
+                &ctx.http,
+                vec![
+                    commands::saizeriya_gacha::register(),
+                    commands::saizeriya_get_by_code::register(),
+                ],
+            )
             .await;
 
         info!("I now have the following guild slash commands: {commands:#?}");
@@ -42,6 +48,9 @@ impl EventHandler for Handler {
 
             let content = match command.data.name.as_str() {
                 "saizeriya_gacha" => Some(commands::saizeriya_gacha::run(&command.data.options())),
+                "saizeriya_get_by_code" => Some(commands::saizeriya_get_by_code::run(
+                    &command.data.options(),
+                )),
                 _ => Some("not implemented :(".to_string()),
             };
 
