@@ -44,7 +44,7 @@ fn create_gacha_results(menus: Vec<menu::Menu>) -> Vec<String> {
 
     results.push("```".to_string());
     let sum_string = sum.to_string();
-    let sum_line = ["合計", &*sum_string, "円\n"];
+    let sum_line = ["合計: ", &*sum_string, "円\n"];
     results.push(sum_line.iter().join(""));
 
     results
