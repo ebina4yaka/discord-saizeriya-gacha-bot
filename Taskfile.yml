@@ -1,18 +1,30 @@
 version: 3
 
 tasks:
-  setup:
+  setup-shuttle:
     desc: setup project
-    cmd: cp .env_example .env
-
-  build:
-    desc: build application
-    cmd: docker compose build
+    cmd: cp .env_example Secrets.toml
 
   run:
     desc: run application
-    cmd: docker compose up
+    cmd: cargo shuttle run
+
+  build:
+    desc: build application
+    cmd: cargo build
+
+  deploy-shuttle:
+    desc: deploy application
+    cmd: cargo shuttle deploy
 
   check:
     desc: check rust code
-    cmd: cargo check
+    cmds:
+      - cargo clippy
+      - cargo check
+
+  fmt:
+    desc: format code
+    cmds:
+      - cargo fmt
+      - cargo clippy --fix --allow-dirty --allow-staged

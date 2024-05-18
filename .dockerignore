@@ -1,8 +1,0 @@
-/target
-
-.gitignore
-docker-compose.yml
-.idea
-.env_example
-.env
-Taskfile.yml

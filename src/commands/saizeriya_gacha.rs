@@ -25,7 +25,6 @@ pub fn run(options: &[ResolvedOption]) -> String {
     let mut gacha_results = create_gacha_results(menus);
     result_texts.append(&mut gacha_results);
 
-
     return result_texts.iter().join("");
 }
 
