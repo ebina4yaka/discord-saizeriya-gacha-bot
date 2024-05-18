@@ -26,11 +26,13 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: 'install rust'
+      - name: Install rust
         run: |
           rustup component add clippy
           rustup component add rustfmt
 
+      - name: Check
+        run: cargo check
       - name: Build test
         run: cargo build --release --verbose
       - name: Run tests
