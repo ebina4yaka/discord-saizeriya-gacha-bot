@@ -1,8 +1,8 @@
 use rand::seq::SliceRandom;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{error::Error, fs::File, io::BufReader, path::Path};
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct Menu {
     pub id: String,
     pub name: String,
@@ -26,6 +26,32 @@ pub fn take_menu(id: String) -> Option<Menu> {
     let menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
 
     menus.into_iter().find(|m| m.id == id)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::data::menu::{Menu, take_menu};
+
+    #[test]
+    fn test_take_menu() {
+        let arg = "304";
+        let option_menu = take_menu(arg.to_string());
+
+        let want = serde_json::to_string(&Menu {
+            id:"304".to_string(),
+            name: "エクストラ・バージン・オリーブオイル".to_string(),
+            value: 1200,
+            category: "takeout".to_string(),
+        }).unwrap();
+
+        match option_menu {
+            None=> panic!("missing menu"),
+            Some(m) => {
+                let actual = serde_json::to_string(&m).unwrap();
+                assert_eq!(actual, want);
+            }
+        }
+    }
 }
 
 pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {

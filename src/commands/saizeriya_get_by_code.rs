@@ -31,7 +31,7 @@ fn generate_result_text(m: Menu) -> String {
 
 fn get_code(options: &[ResolvedOption]) -> String {
     if let Some(ResolvedOption {
-        name: "number",
+        name: "code",
         value: ResolvedValue::String(id),
         ..
     }) = options.first()
