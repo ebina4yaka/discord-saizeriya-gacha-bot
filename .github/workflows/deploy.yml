@@ -1,0 +1,25 @@
+name: Shuttle Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "check"
+        uses: ./.github/workflows/check.yml
+  deploy:
+    needs: [check]
+    runs-on: ubuntu-latest
+    steps:
+      - name: "deploy to shuttle"
+        uses: shuttle-hq/deploy-action@main
+        with:
+          deploy-key: ${{ secrets.SHUTTLE_API_KEY }}
+          secrets: |
+            DISCORD_TOKEN = '${{ secrets.DISCORD_TOKEN }}'
+            GUILD_ID = '${{ secrets.GUILD_ID }}'
