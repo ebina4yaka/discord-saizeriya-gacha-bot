@@ -8,7 +8,6 @@ use serenity::prelude::*;
 use shuttle_runtime::SecretStore;
 use tracing::info;
 
-
 mod commands;
 mod data;
 
