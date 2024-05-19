@@ -30,6 +30,7 @@ pub fn take_menu(id: String) -> Option<Menu> {
 
 pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
     let menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
+    let min_value = get_min(&menus);
 
     let mut picked_menus: Vec<Menu> = vec![];
 
@@ -42,12 +43,11 @@ pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
 
         picked_menus.push(menu);
 
-        let picked_value_sum = picked_menus.iter().map(|i| i.value).sum::<i64>();
-        if picked_value_sum > params.price_limit {
+        if picked_menus.iter().map(|i| i.value).sum::<i64>() > params.price_limit {
             picked_menus.pop();
         }
 
-        if params.price_limit - picked_value_sum < get_min(&menus) {
+        if params.price_limit - picked_menus.iter().map(|i| i.value).sum::<i64>() < min_value {
             return picked_menus;
         }
     }
@@ -75,7 +75,7 @@ fn get_min(slice: &[Menu]) -> i64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::data::menu::{take_menu, Menu};
+    use crate::data::menu::{get_min, load_menu_from_json_file, take_menu, Menu};
 
     #[test]
     fn test_take_menu() {
@@ -97,5 +97,15 @@ mod tests {
                 assert_eq!(actual, want);
             }
         }
+    }
+
+    #[test]
+    fn test_get_min() {
+        let menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
+        let want = 100;
+
+        let actual = get_min(&menus);
+
+        assert_eq!(actual, want)
     }
 }
