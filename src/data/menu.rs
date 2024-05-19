@@ -15,21 +15,21 @@ pub struct GetRandomMenuParams {
     pub exclude_alcohol: bool,
 }
 
-fn load_menu_from_json_file<P: AsRef<Path>>(path: P) -> Result<Vec<Menu>, Box<dyn Error>> {
-    let file = File::open(path)?;
+fn load_menu_from_json_file<P: AsRef<Path>>() -> Result<Vec<Menu>, Box<dyn Error>> {
+    let file = File::open("./src/data/menu.json")?;
     let reader = BufReader::new(file);
     let menu = serde_json::from_reader(reader)?;
     Ok(menu)
 }
 
 pub fn take_menu(id: String) -> Option<Menu> {
-    let menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
+    let menus = load_menu_from_json_file().unwrap();
 
     menus.into_iter().find(|m| m.id == id)
 }
 
 pub fn pick_random_menus(params: GetRandomMenuParams) -> Vec<Menu> {
-    let menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
+    let menus = load_menu_from_json_file().unwrap();
     let min_value = get_min(&menus);
 
     let mut picked_menus: Vec<Menu> = vec![];
