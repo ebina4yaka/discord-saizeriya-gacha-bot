@@ -1,6 +1,6 @@
 use rand::seq::SliceRandom;
 use serde::{Deserialize, Serialize};
-use std::{error::Error, fs::File, io::BufReader, path::Path};
+use std::{error::Error, fs::File, io::BufReader};
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct Menu {
@@ -15,7 +15,7 @@ pub struct GetRandomMenuParams {
     pub exclude_alcohol: bool,
 }
 
-fn load_menu_from_json_file<P: AsRef<Path>>() -> Result<Vec<Menu>, Box<dyn Error>> {
+fn load_menu_from_json_file() -> Result<Vec<Menu>, Box<dyn Error>> {
     let file = File::open("./src/data/menu.json")?;
     let reader = BufReader::new(file);
     let menu = serde_json::from_reader(reader)?;
@@ -101,7 +101,7 @@ mod tests {
 
     #[test]
     fn test_get_min() {
-        let menus = load_menu_from_json_file("./src/data/menu.json").unwrap();
+        let menus = load_menu_from_json_file().unwrap();
         let want = 100;
 
         let actual = get_min(&menus);
